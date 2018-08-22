@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shuxiajian.frame.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.shuxiajian.frame.domain.Department" >
+    <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR" />
+    <result column="PAR_DEPT_CODE" property="parDeptCode" jdbcType="VARCHAR" />
+    <!--与员工的一对多关联映射：collection fetchType="lazy"懒加载-->
+    <collection property="employees" javaType="ArrayList" column="deptId" ofType="com.shuxiajian.frame.domain.Employee"
+                select="com.shuxiajian.frame.mapper.EmployeeMapper.selectByDepId" fetchType="lazy">
+      <id column="EMP_ID" property="empId" jdbcType="VARCHAR" />
+      <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+      <result column="EMP_NAME" property="empName" jdbcType="VARCHAR" />
+      <result column="CUST_ID" property="custId" jdbcType="VARCHAR" />
+      <result column="BRANCH_ID" property="branchId" jdbcType="VARCHAR" />
+      <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+      <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+      <result column="TEL" property="tel" jdbcType="VARCHAR" />
+      <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+      <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+      <result column="SEX" property="sex" jdbcType="VARCHAR" />
+      <result column="IN_DT" property="inDt" jdbcType="DATE" />
+      <result column="OUT_DT" property="outDt" jdbcType="DATE" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DEPT_ID, DEPT_NAME, DEPT_CODE, PAR_DEPT_CODE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_department
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_department
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shuxiajian.frame.domain.Department" >
+    insert into tb_department (DEPT_ID, DEPT_NAME, DEPT_CODE, 
+      PAR_DEPT_CODE)
+    values (#{deptId,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{deptCode,jdbcType=VARCHAR}, 
+      #{parDeptCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shuxiajian.frame.domain.Department" >
+    insert into tb_department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="deptName != null" >
+        DEPT_NAME,
+      </if>
+      <if test="deptCode != null" >
+        DEPT_CODE,
+      </if>
+      <if test="parDeptCode != null" >
+        PAR_DEPT_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCode != null" >
+        #{deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parDeptCode != null" >
+        #{parDeptCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shuxiajian.frame.domain.Department" >
+    update tb_department
+    <set >
+      <if test="deptName != null" >
+        DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCode != null" >
+        DEPT_CODE = #{deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parDeptCode != null" >
+        PAR_DEPT_CODE = #{parDeptCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shuxiajian.frame.domain.Department" >
+    update tb_department
+    set DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      DEPT_CODE = #{deptCode,jdbcType=VARCHAR},
+      PAR_DEPT_CODE = #{parDeptCode,jdbcType=VARCHAR}
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </update>
+</mapper>

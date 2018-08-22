@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shuxiajian.frame.mapper.EmployeeMapper" >
+  <resultMap id="EmpResultMap" type="com.shuxiajian.frame.domain.Employee" >
+    <id column="EMP_ID" property="empId" jdbcType="VARCHAR" />
+    <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="EMP_NAME" property="empName" jdbcType="VARCHAR" />
+    <result column="CUST_ID" property="custId" jdbcType="VARCHAR" />
+    <result column="BRANCH_ID" property="branchId" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="IN_DT" property="inDt" jdbcType="DATE" />
+    <result column="OUT_DT" property="outDt" jdbcType="DATE" />
+    <!--与部门的多对一映射关系:association-->
+    <association property="department" javaType="com.shuxiajian.frame.domain.Department">
+      <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+      <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+      <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR" />
+      <result column="PAR_DEPT_CODE" property="parDeptCode" jdbcType="VARCHAR" />
+    </association>
+    <!--用户属性-->
+    <association property="user" javaType="com.shuxiajian.frame.domain.User">
+      <id column="USERNAME" property="username" jdbcType="VARCHAR" />
+      <result column="EMP_ID" property="empId" jdbcType="VARCHAR" />
+      <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+      <result column="LOGIN_COUNT" property="loginCount" jdbcType="INTEGER" />
+      <result column="LAST_TIME" property="lastTime" jdbcType="TIMESTAMP" />
+    </association>
+  </resultMap>
+
+  <resultMap id="RoleResultMap" type="com.shuxiajian.frame.domain.Role">
+    <id column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="ROLE_DESC" jdbcType="VARCHAR" property="roleDesc" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    EMP_ID, DEPT_ID, EMP_NAME, CUST_ID, BRANCH_ID, EMAIL, MOBILE, TEL, ADDRESS, ID_CARD,
+    SEX, IN_DT, OUT_DT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="EmpResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_employee
+    where EMP_ID = #{empId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByDeptId" resultMap="EmpResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_employee
+    where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_employee
+    where EMP_ID = #{empId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shuxiajian.frame.domain.Employee" >
+    insert into tb_employee (EMP_ID, DEPT_ID, EMP_NAME,
+      CUST_ID, BRANCH_ID, EMAIL,
+      MOBILE, TEL, ADDRESS,
+      ID_CARD, SEX, IN_DT, OUT_DT
+      )
+    values (#{empId,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, #{empName,jdbcType=VARCHAR},
+      #{custId,jdbcType=VARCHAR}, #{branchId,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{mobile,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{idCard,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{inDt,jdbcType=DATE}, #{outDt,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.shuxiajian.frame.domain.Employee" >
+    insert into tb_employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="empId != null" >
+        EMP_ID,
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="empName != null" >
+        EMP_NAME,
+      </if>
+      <if test="custId != null" >
+        CUST_ID,
+      </if>
+      <if test="branchId != null" >
+        BRANCH_ID,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="idCard != null" >
+        ID_CARD,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="inDt != null" >
+        IN_DT,
+      </if>
+      <if test="outDt != null" >
+        OUT_DT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="empId != null" >
+        #{empId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="empName != null" >
+        #{empName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="branchId != null" >
+        #{branchId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="inDt != null" >
+        #{inDt,jdbcType=DATE},
+      </if>
+      <if test="outDt != null" >
+        #{outDt,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shuxiajian.frame.domain.Employee" >
+    update tb_employee
+    <set >
+      <if test="deptId != null" >
+        DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="empName != null" >
+        EMP_NAME = #{empName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        CUST_ID = #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="branchId != null" >
+        BRANCH_ID = #{branchId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        ID_CARD = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="inDt != null" >
+        IN_DT = #{inDt,jdbcType=DATE},
+      </if>
+      <if test="outDt != null" >
+        OUT_DT = #{outDt,jdbcType=DATE},
+      </if>
+    </set>
+    where EMP_ID = #{empId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shuxiajian.frame.domain.Employee" >
+    update tb_employee
+    set DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      EMP_NAME = #{empName,jdbcType=VARCHAR},
+      CUST_ID = #{custId,jdbcType=VARCHAR},
+      BRANCH_ID = #{branchId,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      ID_CARD = #{idCard,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      IN_DT = #{inDt,jdbcType=DATE},
+      OUT_DT = #{outDt,jdbcType=DATE}
+    where EMP_ID = #{empId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryEmployeeListSelectiveByPage" parameterType="map" resultMap="EmpResultMap">
+    select t1.*,t2.username,t2.password,t2.login_count,t2.last_time from tb_employee t1 left outer join tb_user t2
+    on t1.emp_id = t2.emp_id
+    <where>
+      <if test="empId != null and empId !=''">
+        and EMP_ID = #{empId,jdbcType=VARCHAR}
+      </if>
+      <if test="deptId != null and deptId !=''" >
+        and DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      </if>
+      <if test="empName != null and empName !=''" >
+        and EMP_NAME = #{empName,jdbcType=VARCHAR}
+      </if>
+      <if test="custId != null and custId !=''" >
+        and CUST_ID = #{custId,jdbcType=VARCHAR}
+      </if>
+      <if test="branchId != null and branchId !=''" >
+        and BRANCH_ID = #{branchId,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null and email !=''" >
+        and EMAIL = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="mobile != null and mobile !=''" >
+        and MOBILE = #{mobile,jdbcType=VARCHAR}
+      </if>
+      <if test="tel != null and tel !=''" >
+        and TEL = #{tel,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null and address !=''" >
+        and ADDRESS = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="idCard != null and idCard !=''" >
+        and ID_CARD = #{idCard,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null and sex !=''" >
+        and SEX = #{sex,jdbcType=VARCHAR}
+      </if>
+      <if test="inDt != null and inDt !=''" >
+        and IN_DT = #{inDt,jdbcType=DATE}
+      </if>
+      <if test="outDt != null and outDt !=''" >
+        and OUT_DT = #{outDt,jdbcType=DATE}
+      </if>
+    </where>
+    order by ${sort} ${sortOrder}
+  </select>
+  <select id="getCountSelective" parameterType="map" resultType="java.lang.Integer">
+    select count(1) from tb_employee
+    <where>
+      <if test="empId != null and empId !=''">
+        and EMP_ID = #{empId,jdbcType=VARCHAR}
+      </if>
+      <if test="deptId != null and deptId !=''" >
+        and DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      </if>
+      <if test="empName != null and empName !=''" >
+        and EMP_NAME = #{empName,jdbcType=VARCHAR}
+      </if>
+      <if test="custId != null and custId !=''" >
+        and CUST_ID = #{custId,jdbcType=VARCHAR}
+      </if>
+      <if test="branchId != null and branchId !=''" >
+        and BRANCH_ID = #{branchId,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null and email !=''" >
+        and EMAIL = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="mobile != null and mobile !=''" >
+        and MOBILE = #{mobile,jdbcType=VARCHAR}
+      </if>
+      <if test="tel != null and tel !=''" >
+        and TEL = #{tel,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null and address !=''" >
+        and ADDRESS = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="idCard != null and idCard !=''" >
+        and ID_CARD = #{idCard,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null and sex !=''" >
+        and SEX = #{sex,jdbcType=VARCHAR}
+      </if>
+      <if test="inDt != null and inDt !=''" >
+        and IN_DT = #{inDt,jdbcType=DATE}
+      </if>
+      <if test="outDt != null and outDt !=''" >
+        and OUT_DT = #{outDt,jdbcType=DATE}
+      </if>
+    </where>
+  </select>
+
+  <select id="queryRoleListByUsername" parameterType="java.lang.String" resultMap="RoleResultMap">
+    SELECT t2.role_id,t2.ROLE_NAME,t2.ROLE_DESC
+    FROM tb_user_role t1 left join tb_role t2 on t1.ROLE_ID = t2.ROLE_ID
+    where t1.USERNAME= #{username,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteRoleListOfUsername">
+    delete from tb_user_role where username = #{username,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="saveRoleListOfUsername">
+    insert into tb_user_role (role_id,username) values
+    <foreach collection="arrRoleIdList" item="item" index="index" separator = ",">
+      (#{item,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>

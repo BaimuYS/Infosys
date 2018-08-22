@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shuxiajian.frame.mapper.MenuMapper">
+  <resultMap id="MenuResultMap" type="com.shuxiajian.frame.domain.Menu">
+    <id column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PAR_MENU_ID" jdbcType="VARCHAR" property="parMenuId" />
+    <result column="MENU_ORDER" jdbcType="INTEGER" property="menuOrder" />
+    <result column="ICON_CLASS" jdbcType="VARCHAR" property="iconClass" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MENU_ID, NAME, URL, PAR_MENU_ID, MENU_ORDER, ICON_CLASS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="MenuResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_menu
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_menu
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shuxiajian.frame.domain.Menu">
+    insert into tb_menu (MENU_ID, NAME, URL,
+      PAR_MENU_ID, MENU_ORDER, ICON_CLASS
+      )
+    values (#{menuId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+      #{parMenuId,jdbcType=VARCHAR}, #{menuOrder,jdbcType=INTEGER}, #{iconClass,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.shuxiajian.frame.domain.Menu">
+    insert into tb_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        MENU_ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="parMenuId != null">
+        PAR_MENU_ID,
+      </if>
+      <if test="menuOrder != null">
+        MENU_ORDER,
+      </if>
+      <if test="iconClass != null">
+        ICON_CLASS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parMenuId != null">
+        #{parMenuId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuOrder != null">
+        #{menuOrder,jdbcType=INTEGER},
+      </if>
+      <if test="iconClass != null">
+        #{iconClass,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shuxiajian.frame.domain.Menu">
+    update tb_menu
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parMenuId != null">
+        PAR_MENU_ID = #{parMenuId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuOrder != null">
+        MENU_ORDER = #{menuOrder,jdbcType=INTEGER},
+      </if>
+      <if test="iconClass != null">
+        ICON_CLASS = #{iconClass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shuxiajian.frame.domain.Menu">
+    update tb_menu
+    set NAME = #{name,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      PAR_MENU_ID = #{parMenuId,jdbcType=VARCHAR},
+      MENU_ORDER = #{menuOrder,jdbcType=INTEGER},
+      ICON_CLASS = #{iconClass,jdbcType=VARCHAR}
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </update>
+  <select id="queryMenuListSelectiveByPage" parameterType="map" resultMap="MenuResultMap">
+    select * from tb_menu
+    <where>
+      <if test="menuId != null and menuId != ''">
+        and MENU_ID = #{menuId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null and name != ''">
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="url != null">
+        and URL = #{url,jdbcType=VARCHAR}
+      </if>
+      <if test="parMenuId != null and parMenuId != ''">
+        and PAR_MENU_ID = #{parMenuId,jdbcType=VARCHAR}
+      </if>
+      <if test="menuOrder != null">
+        and MENU_ORDER = #{menuOrder,jdbcType=INTEGER}
+      </if>
+      <if test="iconClass != null">
+        and ICON_CLASS = #{iconClass,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by ${sort} ${sortOrder}
+
+  </select>
+  <select id="queryMenuListSelective" parameterType="map" resultMap="MenuResultMap">
+    select * from tb_menu
+    <where>
+      <if test="menuId != null and menuId != ''">
+        and MENU_ID = #{menuId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null and name != ''">
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="url != null">
+        and URL = #{url,jdbcType=VARCHAR}
+      </if>
+      <if test="parMenuId != null and parMenuId != ''">
+        and PAR_MENU_ID = #{parMenuId,jdbcType=VARCHAR}
+      </if>
+      <if test="menuOrder != null">
+        and MENU_ORDER = #{menuOrder,jdbcType=INTEGER}
+      </if>
+      <if test="iconClass != null">
+        and ICON_CLASS = #{iconClass,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by PAR_MENU_ID,MENU_ORDER ASC
+  </select>
+  <select id="getCountSelective" parameterType="map" resultType="java.lang.Integer">
+    select count(1) from tb_menu
+    <where>
+      <if test="menuId != null and menuId != ''">
+        and MENU_ID = #{menuId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null and name != ''">
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="url != null">
+        and URL = #{url,jdbcType=VARCHAR}
+      </if>
+      <if test="parMenuId != null and parMenuId != ''">
+        and PAR_MENU_ID = #{parMenuId,jdbcType=VARCHAR}
+      </if>
+      <if test="menuOrder != null">
+        and MENU_ORDER = #{menuOrder,jdbcType=INTEGER}
+      </if>
+      <if test="iconClass != null">
+        and ICON_CLASS = #{iconClass,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectMenuListByRoleId" parameterType="java.lang.String" resultMap="MenuResultMap">
+    select
+    <include refid="Base_Column_List" />
+     from tb_menu where menu_id in (
+      select menu_id from tb_role_menu where role_id = #{roleId,jdbcType=VARCHAR}
+    )
+  </select>
+  <select id="selectMenuListByUsername" parameterType="java.lang.String" resultMap="MenuResultMap">
+      select <include refid="Base_Column_List" />
+        from tb_menu
+       where menu_id in (select t3.MENU_ID
+                           from tb_user t1
+                           LEFT JOIN tb_user_role t2
+                             on t1.USERNAME = t2.USERNAME
+                           LEFT JOIN tb_role_menu t3
+                             on t2.ROLE_ID = t3.ROLE_ID
+                          where t1.USERNAME = #{username,jdbcType=VARCHAR})
+      UNION
+      select <include refid="Base_Column_List" />
+        from tb_menu
+       where menu_id in
+             (SELECT PAR_MENU_ID
+                FROM tb_menu
+               WHERE MENU_ID IN (select t3.MENU_ID
+                                   from tb_user t1
+                                   LEFT JOIN tb_user_role t2
+                                     on t1.USERNAME = t2.USERNAME
+                                   LEFT JOIN tb_role_menu t3
+                                     on t2.ROLE_ID = t3.ROLE_ID
+                                  where t1.USERNAME = #{username,jdbcType=VARCHAR}))
+       order by PAR_MENU_ID, MENU_ORDER ASC
+  </select>
+</mapper>
