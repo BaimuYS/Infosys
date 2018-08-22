@@ -72,7 +72,7 @@
         <ul class="sidebar-nav">
             <!-- 加载菜单数据 -->
             <li class="sidebar-nav-heading">常用功能 <span class="sidebar-nav-heading-info"> </span></li>
-            <li class="sidebar-nav-link" th:each="menu:${menuList}" th:if="!${menu.getParMenuId()}">
+            <li class="sidebar-nav-link" th:each="menu:${menuList}" th:if="!${menu.getParMenuId()} or ${menu.getParMenuId()} == ''">
                 <a class="sidebar-nav-sub-title" href="#">
                     <i th:class="sidebar-nav-link-logo" th:classappend="${menu.getIconClass()}"></i> <span th:text="${menu.getName()}"></span>
                     <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
